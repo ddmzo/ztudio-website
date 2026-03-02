@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ztudio.co</title>
+    <meta name="description" content="ztudio.co — construction. design. apps." />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        :root {
+            --bg: #0a0a0a;
+            --s: #131313;
+            --s2: #1c1c1c;
+            --b: rgba(255, 255, 255, 0.06);
+            --t: #dedede;
+            --d: #505050;
+            --m: #2e2e2e;
+            --accent: #c8f060;
+            --tr: 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--t);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ── HEADER ── */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            border-bottom: 1px solid var(--b);
+            background: rgba(10, 10, 10, 0.92);
+            backdrop-filter: blur(18px);
+        }
+
+        .logo {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--t);
+            text-decoration: none;
+            letter-spacing: 0.04em;
+        }
+
+        .logo em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        /* ── LANGUAGE SLIDER ── */
+        .lang-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lang-label {
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            color: var(--d);
+            transition: color .2s;
+            user-select: none;
+        }
+
+        .lang-label.on {
+            color: var(--t);
+        }
+
+        .lang-toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .lang-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+        }
+
+        .lang-track {
+            position: absolute;
+            inset: 0;
+            background: var(--s2);
+            border: 1px solid var(--b);
+            border-radius: 100px;
+            transition: background .3s;
+        }
+
+        .lang-toggle input:checked~.lang-track {
+            background: #1e1e1e;
+        }
+
+        .lang-knob {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--d);
+            transition: transform .3s var(--tr), background .3s;
+        }
+
+        .lang-toggle input:checked~.lang-knob {
+            transform: translateX(20px);
+            background: var(--accent);
+        }
+
+        .h-right {
+            font-size: 11px;
+            color: var(--d);
+            background: none;
+            border: none;
+            letter-spacing: 0.07em;
+            cursor: pointer;
+            transition: color .2s;
+            padding: 0;
+        }
+
+        .h-right:hover {
+            color: var(--t);
+        }
+
+        .h-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        /* ── CONTACT POPUP ── */
+        .contact-wrap {
+            position: relative;
+        }
+
+        .contact-card {
+            position: absolute;
+            top: calc(100% + 14px);
+            right: 0;
+            width: 280px;
+            background: #161616;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            z-index: 500;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px) scale(0.97);
+            transition: opacity .25s, visibility .25s, transform .25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .contact-card.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .cc-logo {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--t);
+        }
+
+        .cc-logo em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        .cc-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .cc-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .cc-lbl {
+            font-size: 9px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--m);
+        }
+
+        .cc-val {
+            font-size: 11px;
+            color: var(--t);
+            text-decoration: none;
+            transition: color .2s;
+        }
+
+        .cc-val:hover {
+            color: var(--accent);
+        }
+
+        .cc-divider {
+            border: none;
+            border-top: 1px solid var(--b);
+            margin: 14px 0;
+        }
+
+        .cc-social {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .cc-soc {
+            font-size: 10px;
+            letter-spacing: .07em;
+            color: var(--d);
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid var(--b);
+            border-radius: 100px;
+            transition: all .2s;
+        }
+
+        .cc-soc:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        [data-i18n] {
+            transition: opacity .15s;
+        }
+
+        /* ── PAGE ── */
+        .page {
+            padding-top: 96px;
+            padding-bottom: 80px;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding-left: 40px;
+            padding-right: 40px;
+            position: relative;
+        }
+
+        /* ── 3-COLUMN GRID ── */
+        .cols {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0 28px;
+            align-items: start;
+            filter: blur(15px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .blur-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 50;
+            text-align: center;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .blur-msg {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--t);
+            letter-spacing: 0.1em;
+            text-transform: lowercase;
+            text-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        .blur-sub {
+            font-size: 12px;
+            color: var(--accent);
+            margin-top: 8px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        /* ── COLUMN ── */
+        .col {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* ── COL HEADER ── */
+        .col-head {
+            position: sticky;
+            top: 56px;
+            z-index: 10;
+            background: rgba(10, 10, 10, 0.92);
+            backdrop-filter: blur(12px);
+            padding: 18px 16px;
+            border-bottom: 1px solid var(--b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .col-head-title {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            color: var(--t);
+        }
+
+        .col-count {
+            font-size: 10px;
+            color: var(--m);
+            letter-spacing: 0.06em;
+        }
+
+        /* ── CARD ── */
+        .card {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 1;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            margin: 0 10px;
+            transition: var(--tr);
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.18);
+            transform: scale(1.01);
+            z-index: 5;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: brightness(0.6) saturate(0.75);
+            transition: filter .6s ease, transform .6s ease;
+        }
+
+        .card:hover .card-img {
+            filter: brightness(0.88) saturate(1);
+            transform: scale(1.05);
+        }
+
+        .card-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: brightness(0.6) saturate(0.75);
+            transition: filter .6s;
+        }
+
+        .card:hover .card-video {
+            filter: brightness(0.88) saturate(1);
+        }
+
+        /* App card */
+        .card.app-card {
+            background: var(--s2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .app-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            transition: transform .35s, box-shadow .35s;
+        }
+
+        .card.app-card:hover .app-icon {
+            transform: scale(1.1);
+        }
+
+        .app-lbl {
+            font-size: 12px;
+            color: var(--t);
+        }
+
+        .app-sub {
+            font-size: 10px;
+            color: var(--d);
+        }
+
+        /* Card overlay */
+        .card-info {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, transparent 52%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 14px;
+            pointer-events: none;
+        }
+
+        .c-name {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--t);
+            margin-bottom: 2px;
+        }
+
+        .c-sub {
+            font-size: 9px;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.38);
+        }
+
+        /* Arrow */
+        .c-arrow {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: var(--tr);
+        }
+
+        .card:hover .c-arrow {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            padding: 28px 40px;
+            border-top: 1px solid var(--b);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .f-logo {
+            font-size: 12px;
+            color: var(--d);
+        }
+
+        .f-logo em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        .f-copy {
+            font-size: 10px;
+            color: var(--m);
+        }
+
+        /* ── MODAL ── */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .3s, visibility .3s;
+        }
+
+        .overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: #111;
+            border: 1px solid var(--b);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 800px;
+            height: 88vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: translateY(24px) scale(0.97);
+            transition: var(--tr);
+        }
+
+        .overlay.open .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .m-top {
+            background: #111;
+            padding: 18px 24px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--b);
+            flex-shrink: 0;
+        }
+
+        .m-cat {
+            font-size: 9px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--d);
+            margin-bottom: 4px;
+        }
+
+        .m-name {
+            font-size: 19px;
+            font-weight: 500;
+            color: var(--t);
+        }
+
+        .m-x {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--s2);
+            border: 1px solid var(--b);
+            color: var(--d);
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .2s;
+            flex-shrink: 0;
+        }
+
+        .m-x:hover {
+            background: var(--t);
+            color: #000;
+            border-color: var(--t);
+        }
+
+        .m-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        /* Left: photos */
+        .m-left {
+            padding: 16px 16px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        /* Right: info — becomes bottom strip */
+        .m-right {
+            padding: 14px 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border-top: 1px solid var(--b);
+            flex-shrink: 0;
+        }
+
+        /* Gallery */
+        .gal-main {
+            position: relative;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .gal-main img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            display: block;
+            transition: filter .4s;
+        }
+
+        .gal-main:hover img {
+            filter: brightness(1.05);
+        }
+
+        .gal-nav {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            opacity: 0;
+            transition: opacity .2s;
+        }
+
+        .gal-main:hover .gal-nav {
+            opacity: 1;
+        }
+
+        .g-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .2s;
+        }
+
+        .g-btn:hover {
+            background: rgba(0, 0, 0, .95);
+        }
+
+        .g-cnt {
+            position: absolute;
+            bottom: 10px;
+            right: 12px;
+            font-size: 9px;
+            letter-spacing: .08em;
+            color: rgba(255, 255, 255, .5);
+            background: rgba(0, 0, 0, .5);
+            padding: 3px 7px;
+            border-radius: 100px;
+        }
+
+        .gal-thumbs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 22px;
+        }
+
+        .g-th {
+            flex: 1;
+            aspect-ratio: 4/3;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color .2s, opacity .2s;
+            opacity: .45;
+        }
+
+        .g-th.active {
+            border-color: var(--accent);
+            opacity: 1;
+        }
+
+        .g-th:hover {
+            opacity: .75;
+        }
+
+        .g-th img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .m-desc {
+            font-size: 12px;
+            line-height: 1.9;
+            color: var(--d);
+            margin-bottom: 22px;
+        }
+
+        .meta {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            padding-top: 18px;
+            border-top: 1px solid var(--b);
+        }
+
+        .mk {
+            font-size: 9px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--m);
+            margin-bottom: 3px;
+            display: block;
+        }
+
+        .mv {
+            font-size: 12px;
+            color: var(--t);
+        }
+
+        .a-hero {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: var(--s2);
+            border-radius: 12px;
+            margin-bottom: 22px;
+            border: 1px solid var(--b);
+        }
+
+        .a-ico {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            flex-shrink: 0;
+        }
+
+        .a-txt h2 {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .a-txt p {
+            font-size: 12px;
+            color: var(--d);
+        }
+
+        .feats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 18px 0;
+        }
+
+        .feat {
+            background: var(--s2);
+            border: 1px solid var(--b);
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .fi {
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+
+        .ft {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--t);
+            margin-bottom: 3px;
+        }
+
+        .fd {
+            font-size: 10px;
+            color: var(--d);
+            line-height: 1.6;
+        }
+
+        .a-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            background: var(--accent);
+            color: #000;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 100px;
+            margin-top: 6px;
+            transition: all .2s;
+        }
+
+        .a-link:hover {
+            background: #fff;
+            transform: translateY(-2px);
+        }
+
+        .a-link.off {
+            opacity: .35;
+            pointer-events: none;
+        }
+
+        @media(max-width:860px) {
+            header {
+                padding: 0 20px;
+            }
+
+            .page {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .cols {
+                grid-template-columns: 1fr 1fr;
+                gap: 0 8px;
+            }
+
+            .col:last-child {
+                display: none;
+            }
+
+            footer {
+                padding: 20px;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .feats {
+                grid-template-columns: 1fr;
+            }
+
+            .a-hero {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media(max-width:560px) {
+            .cols {
+                grid-template-columns: 1fr;
+            }
+
+            .col:last-child {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="#" class="logo">ztudio<em>.</em>co</a>
+
+        <div class="h-actions">
+            <!-- LANGUAGE SLIDER -->
+            <div class="lang-wrap">
+                <span class="lang-label" id="lblEN">EN</span>
+                <label class="lang-toggle">
+                    <input type="checkbox" id="langSwitch" onchange="switchLang(this.checked)" checked />
+                    <div class="lang-track"></div>
+                    <div class="lang-knob"></div>
+                </label>
+                <span class="lang-label on" id="lblTR">TR</span>
+            </div>
+
+            <div class="contact-wrap">
+                <button class="h-right" data-i18n="hello" onclick="toggleContact(event)">say hello.</button>
+                <div class="contact-card" id="contactCard">
+                    <div class="cc-logo">ztudio<em>.</em>co</div>
+                    <div class="cc-row">
+                        <div class="cc-item">
+                            <span class="cc-lbl">E-mail</span>
+                            <a class="cc-val" href="mailto:hello@ztudio.co">hello@ztudio.co</a>
+                        </div>
+                        <div class="cc-item">
+                            <span class="cc-lbl">Telefon</span>
+                            <span class="cc-val">+90 532 478 61 59</span>
+                        </div>
+                        <div class="cc-item">
+                            <span class="cc-lbl">Adres</span>
+                            <span class="cc-val">Dumlupınar Mah. Yumurtacı Abdi Bey Cad.<br />Nuhoğlu Yenitepe Sitesi
+                                1.Etap
+                                B/Blok D:30<br />Kadıköy / İstanbul</span>
+                        </div>
+                    </div>
+                    <hr class="cc-divider" />
+                    <div class="cc-social">
+                        <a class="cc-soc" href="#">instagram</a>
+                        <a class="cc-soc" href="#">linkedin</a>
+                        <a class="cc-soc" href="gaiatakas.app" target="_blank">takas ↗</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="page">
+        <div class="blur-overlay">
+            <div class="blur-msg" data-i18n="updating">updating portfolio.</div>
+            <div class="blur-sub" data-i18n="coming-soon">coming soon</div>
+        </div>
+        <div class="cols">
+
+            <!-- CONSTRUCTION -->
+            <div class="col" id="construction">
+                <div class="col-head">
+                    <span class="col-head-title" data-i18n="con-head">construction.</span>
+                </div>
+
+                <div class="card" onclick="show('c-altunizade')">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&q=80"
+                        alt="altunizade" />
+                    <div class="card-info">
+                        <div class="c-name">altunizade.</div>
+                        <div class="c-sub" data-i18n="sub-res-ist">Residential · İstanbul</div>
+                    </div>
+                    <div class="c-arrow">↗</div>
+                </div>
+
+                <div class="card" onclick="show('c-kadikoy')">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80"
+                        alt="kadıköy" />
+                    <div class="card-info">
+                        <div class="c-name">kadıköy.</div>
+                        <div class="c-sub" data-i18n="sub-com-ist">Commercial · İstanbul</div>
+                    </div>
+                    <div class="c-arrow">↗</div>
+                </div>
+
+                <div class="card" onclick="show('c-cekmeköy')">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80"
+                        alt="çekmeköy" />
+                    <div class="card-info">
+                        <div class="c-name">çekmeköy.</div>
+                        <div class="c-sub" data-i18n="sub-res-ist">Residential · İstanbul</div>
+                    </div>
+                    <div class="c-arrow">↗</div>
+                </div>
+
+                <div class="card" onclick="show('c-uskudar')">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1486134786765-a8e368f3cd89?w=600&q=80"
+                        alt="üsküdar" />
+                    <div class="card-info">
+                        <div class="c-name">üsküdar.</div>
+                        <div class="c-sub" data-i18n="sub-mix-ist">Mixed Use · İstanbul</div>
+                    </div>
+                    <div class="c-arrow">↗</div>
+                </div>
+
+                <div class="card" onclick="show('c-antalya')">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80"
+                        alt="antalya" />
+                    <div class="card-info">
+                        <div class="c-name">antalya.</div>
+                        <div class="c-sub" data-i18n="sub-resort">Resort · Antalya</div>
+                    </div>
+                    <div class="c-arrow">↗</div>
+                </div>
+
+                <div class="card" onclick="show('c-london')">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80"
+                        alt="ingiltere" />
+                    <div class="card-info">
+                        <div class="c-name">i̇ngiltere.</div>
+                        <div class="c-sub" data-i18n="sub-res-lon">Residential · London</div>
+                    </div>
+                    <div class="c-arrow">↗</div>
+                </div>
+            </div>
+
+            <!-- DESIGN -->
+            <div class="col" id="design">
+                <div class="col-head">
+                    <span class="col-head-title" data-i18n="des-head">design.</span>
+                </div>
+
+                <div class="card" onclick="show('d-1')">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"
+                        alt="series i" />
+                    <div class="card-info">
+                        <div class="c-name">series i.</div>
+                        <div class="c-sub" data-i18n="sub-dart">Digital Art · 2024</div>
+                    </div>
+                    <div class="c-arrow">↗</div>
+                </div>
+
+                <div class="card" onclick="show('d-2')">
+                    <video class="card-video" autoplay muted loop playsinline>
+                        <source src="https://videos.pexels.com/video-files/2022396/2022396-uhd_2560_1440_25fps.mp4"
+                            type="video/mp4" />
+                    </video>
+                    <div class="card-info">
+                        <div class="c-name">series ii.</div>
+                        <div class="c-sub" data-i18n="sub-gen">Generative · 2024</div>
+                    </div>
+                    <div class="c-arrow">↗</div>
+                </div>
+
+                <div class="card" onclick="show('d-3')">
+                    <video class="card-video" autoplay muted loop playsinline>
+                        <source src="https://videos.pexels.com/video-files/3214180/3214180-uhd_2560_1440_25fps.mp4"
+                            type="video/mp4" />
+                    </video>
+                    <div class="card-info">
+                        <div class="c-name">motion.</div>
+                        <div class="c-sub" data-i18n="sub-motion">Motion Design · 2023</div>
+                    </div>
+                    <div class="c-arrow">↗</div>
+                </div>
+
+                <div class="card" onclick="show('d-4')">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1622737133809-d95047b9e673?w=600&q=80"
+                        alt="identity" />
+                    <div class="card-info">
+                        <div class="c-name">identity.</div>
+                        <div class="c-sub" data-i18n="sub-brand">Brand Design · 2023</div>
+                    </div>
+                    <div class="c-arrow">↗</div>
+                </div>
+            </div>
+
+            <!-- APPS -->
+            <div class="col" id="apps">
+                <div class="col-head">
+                    <span class="col-head-title" data-i18n="app-head">apps.</span>
+                </div>
+
+                <div class="card app-card" onclick="show('a-takas')">
+                    <div class="app-icon"
+                        style="background:linear-gradient(135deg,#6c47ff,#a78bfa);box-shadow:0 14px 36px rgba(108,71,255,.35)">
+                        🔄</div>
+                    <div class="app-lbl">takas.</div>
+                    <div class="app-sub" data-i18n="sub-takas">Swap & Exchange</div>
+                    <div class="c-arrow">↗</div>
+                </div>
+
+                <div class="card app-card" onclick="show('a-find')">
+                    <div class="app-icon"
+                        style="background:linear-gradient(135deg,#059669,#34d399);box-shadow:0 14px 36px rgba(5,150,105,.3)">
+                        🔍</div>
+                    <div class="app-lbl">find.</div>
+                    <div class="app-sub" data-i18n="sub-find">Discovery</div>
+                    <div class="c-arrow">↗</div>
+                </div>
+
+                <div class="card app-card" onclick="show('a-change')">
+                    <div class="app-icon"
+                        style="background:linear-gradient(135deg,#d97706,#fbbf24);box-shadow:0 14px 36px rgba(217,119,6,.3)">
+                        🌱</div>
+                    <div class="app-lbl">change.</div>
+                    <div class="app-sub" data-i18n="sub-change">Social Impact</div>
+                    <div class="c-arrow">↗</div>
+                </div>
+
+                <div class="card app-card" onclick="show('a-materials')">
+                    <div class="app-icon"
+                        style="background:linear-gradient(135deg,#0e7490,#22d3ee);box-shadow:0 14px 36px rgba(14,116,144,.3)">
+                        🧱</div>
+                    <div class="app-lbl">materials.</div>
+                    <div class="app-sub" data-i18n="sub-mat">Construction</div>
+                    <div class="c-arrow">↗</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="f-logo">ztudio<em>.</em>co</div>
+        <div class="f-copy" data-i18n="copy">© 2025 ztudio. All rights reserved.</div>
+    </footer>
+
+    <!-- MODAL -->
+    <div class="overlay" id="overlay" onclick="closeIf(event)">
+        <div class="modal">
+            <div class="m-top">
+                <div>
+                    <div class="m-cat" id="mCat"></div>
+                    <div class="m-name" id="mName"></div>
+                </div>
+                <button class="m-x" onclick="closeM()">✕</button>
+            </div>
+            <div class="m-body" id="mBody"></div>
+        </div>
+    </div>
+
+    <script>
+        /* ── i18n ── */
+        const T = {
+            en: {
+                'con-head': 'construction.',
+                'des-head': 'design.',
+                'app-head': 'apps.',
+                'sub-res-ist': 'Residential · İstanbul',
+                'sub-com-ist': 'Commercial · İstanbul',
+                'sub-mix-ist': 'Mixed Use · İstanbul',
+                'sub-resort': 'Resort · Antalya',
+                'sub-res-lon': 'Residential · London',
+                'sub-dart': 'Digital Art · 2024',
+                'sub-gen': 'Generative · 2024',
+                'sub-motion': 'Motion Design · 2023',
+                'sub-brand': 'Brand Design · 2023',
+                'sub-takas': 'Swap & Exchange',
+                'sub-find': 'Discovery',
+                'sub-change': 'Social Impact',
+                'sub-mat': 'Construction',
+                'hello': 'say hello.',
+                'copy': '© 2025 ztudio. All rights reserved.',
+                'updating': 'updating projects.',
+                'coming-soon': 'coming soon',
+            },
+            tr: {
+                'con-head': 'i̇nşaat.',
+                'des-head': 'tasarım.',
+                'app-head': 'uygulamalar.',
+                'sub-res-ist': 'Konut · İstanbul',
+                'sub-com-ist': 'Ticari · İstanbul',
+                'sub-mix-ist': 'Karma Kullanım · İstanbul',
+                'sub-resort': 'Tatil Köyü · Antalya',
+                'sub-res-lon': 'Konut · Londra',
+                'sub-dart': 'Dijital Sanat · 2024',
+                'sub-gen': 'Üretimsel · 2024',
+                'sub-motion': 'Hareket Tasarımı · 2023',
+                'sub-brand': 'Marka Tasarımı · 2023',
+                'sub-takas': 'Takas & Değiş Tokuş',
+                'sub-find': 'Keşif',
+                'sub-change': 'Sosyal Etki',
+                'sub-mat': 'İnşaat',
+                'hello': 'merhaba de.',
+                'copy': '© 2025 ztudio. Tüm hakları saklıdır.',
+                'updating': 'projeler güncelleniyor.',
+                'coming-soon': 'yakında',
+            }
+        };
+
+        let lang = 'tr';
+
+        // Set initial language on load
+        window.addEventListener('load', () => {
+            switchLang(true);
+        });
+
+        function switchLang(isTR) {
+            lang = isTR ? 'tr' : 'en';
+            document.getElementById('lblEN').classList.toggle('on', !isTR);
+            document.getElementById('lblTR').classList.toggle('on', isTR);
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (T[lang][key] !== undefined) {
+                    el.style.opacity = '0';
+                    setTimeout(() => {
+                        el.textContent = T[lang][key];
+                        el.style.opacity = '1';
+                    }, 120);
+                }
+            });
+        }
+
+        /* ── CONTACT POPUP ── */
+        function toggleContact(e) {
+            e.stopPropagation();
+            document.getElementById('contactCard').classList.toggle('open');
+        }
+        document.addEventListener('click', function (e) {
+            const card = document.getElementById('contactCard');
+            if (!card.contains(e.target)) card.classList.remove('open');
+        });
+
+        /* ── DATA ── */
+        const D = {
+            'c-altunizade': { cat: 'Construction · İstanbul', name: 'altunizade.', desc: { en: 'Premium residential project in Altunizade. Modern architecture meeting functional elegance across 12 units.', tr: 'Altunizade\'de premium konut projesi. 12 ünite boyunca modern mimari ve işlevsel zarafet.' }, loc: 'Altunizade, İstanbul', year: '2023', type: { en: 'Residential', tr: 'Konut' }, p: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=900&q=85', 'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=600', 'https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600', 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600'] },
+            'c-kadikoy': { cat: 'Construction · İstanbul', name: 'kadıköy.', desc: { en: 'Commercial transformation in Kadıköy. Mixed-use with retail ground floor and creative offices above.', tr: 'Kadıköy\'de ticari dönüşüm. Zemin kat perakende ve üst katlarda yaratıcı ofisler.' }, loc: 'Kadıköy, İstanbul', year: '2023', type: { en: 'Commercial', tr: 'Ticari' }, p: ['https://images.unsplash.com/photo-1486325212027-8081e485255e?w=900&q=85', 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600', 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600', 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?w=600'] },
+            'c-cekmeköy': { cat: 'Construction · İstanbul', name: 'çekmeköy.', desc: { en: 'Suburban residential on the Asian side of Istanbul. Landscaped communal areas and sustainable design.', tr: 'İstanbul Anadolu yakasında banliyö konut projesi. Peyzajlı ortak alanlar ve sürdürülebilir tasarım.' }, loc: 'Çekmeköy, İstanbul', year: '2022', type: { en: 'Residential', tr: 'Konut' }, p: ['https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=900&q=85', 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=600', 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=600', 'https://images.unsplash.com/photo-1556020685-ae41abfc9365?w=600'] },
+            'c-uskudar': { cat: 'Construction · İstanbul', name: 'üsküdar.', desc: { en: 'Mixed-use blending historic Üsküdar with contemporary design. 8 residential floors.', tr: 'Tarihi Üsküdar karakterini çağdaş tasarımla harmanlayan karma kullanım. 8 konut katı.' }, loc: 'Üsküdar, İstanbul', year: '2024', type: { en: 'Mixed Use', tr: 'Karma Kullanım' }, p: ['https://images.unsplash.com/photo-1486134786765-a8e368f3cd89?w=900&q=85', 'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=600', 'https://images.unsplash.com/photo-1471039497385-b6d6ba609f9c?w=600', 'https://images.unsplash.com/photo-1453306458620-5bbef13a5bca?w=600'] },
+            'c-antalya': { cat: 'Construction · Antalya', name: 'antalya.', desc: { en: 'Mediterranean resort residential with panoramic sea views, private pools and premium finishing.', tr: 'Panoramik deniz manzarası, özel havuzlar ve premium detaylarla Akdeniz tatil konutu.' }, loc: 'Konyaaltı, Antalya', year: '2024', type: { en: 'Resort', tr: 'Tatil Köyü' }, p: ['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&q=85', 'https://images.unsplash.com/photo-1575517111478-7f6afd0973db?w=600', 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600', 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600'] },
+            'c-london': { cat: 'Construction · London', name: 'i̇ngiltere.', desc: { en: 'Premium refurbishment in Central London. Full interior redesign and structural upgrades to a Georgian townhouse.', tr: 'Merkezi Londra\'da premium tadilat. Gürcü dönemi şehir evinde tam iç tasarım ve yapısal yükseltme.' }, loc: 'Central London, UK', year: '2023', type: { en: 'Refurbishment', tr: 'Tadilat' }, p: ['https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&q=85', 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600', 'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=600', 'https://images.unsplash.com/photo-1616137422495-1e9e46e2aa77?w=600'] },
+            'd-1': { cat: 'Digital Art · 2024', name: 'series i.', desc: { en: 'Digital visual art series at the intersection of urban architecture and abstract form. 24 unique pieces.', tr: 'Kentsel mimari ve soyut formun kesişiminde dijital görsel sanat serisi. 24 özgün eser.' }, loc: 'Digital', year: '2024', type: { en: 'Digital Art', tr: 'Dijital Sanat' }, p: ['https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=85', 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600', 'https://images.unsplash.com/photo-1563089145-599997674d42?w=600', 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600'] },
+            'd-2': { cat: 'Generative Art · 2024', name: 'series ii.', desc: { en: 'Generative art using algorithmic processes to create unique visual compositions. Each piece is one-of-one.', tr: 'Benzersiz görsel kompozisyonlar oluşturmak için algoritmik süreçler kullanan üretimsel sanat. Her eser tektir.' }, loc: 'Digital', year: '2024', type: { en: 'Generative', tr: 'Üretimsel' }, p: ['https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=900&q=85', 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=600', 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600', 'https://images.unsplash.com/photo-1637858868799-7f26a0640eb6?w=600'] },
+            'd-3': { cat: 'Motion Design · 2023', name: 'motion.', desc: { en: 'Motion design for brand communications, digital platforms and installation art. Fluid, purposeful movement.', tr: 'Marka iletişimi, dijital platformlar ve enstalasyon sanatı için hareket tasarımı. Akıcı ve amaçlı hareket.' }, loc: 'Digital', year: '2023', type: { en: 'Motion', tr: 'Hareket' }, p: ['https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=900&q=85', 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600', 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600', 'https://images.unsplash.com/photo-1558655146-d09347e92766?w=600'] },
+            'd-4': { cat: 'Brand Design · 2023', name: 'identity.', desc: { en: 'Brand identity systems for construction and tech companies. Visual storytelling through consistent, bold design.', tr: 'İnşaat ve teknoloji şirketleri için marka kimlik sistemleri. Tutarlı ve cesur tasarım aracılığıyla görsel hikaye anlatımı.' }, loc: 'İstanbul', year: '2023', type: { en: 'Branding', tr: 'Marka' }, p: ['https://images.unsplash.com/photo-1622737133809-d95047b9e673?w=900&q=85', 'https://images.unsplash.com/photo-1600132806608-231446b2e7af?w=600', 'https://images.unsplash.com/photo-1634070347873-44e0f99a9b71?w=600', 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600'] },
+            'a-takas': { cat: 'Application', name: 'takas.', icon: '🔄', bg: 'linear-gradient(135deg,#6c47ff,#a78bfa)', tag: { en: 'Swap & Exchange Platform', tr: 'Takas & Değiş Tokuş Platformu' }, desc: { en: 'Peer-to-peer swapping platform connecting people who want to exchange goods without money.', tr: 'Para kullanmadan eşya değiş tokuşu yapmak isteyen insanları birbirine bağlayan P2P takas platformu.' }, link: 'https://gaiatakas.app', feats: { en: [{ i: '🤝', t: 'Direct Swaps', d: 'Connect and propose fair exchanges' }, { i: '📍', t: 'Location Based', d: 'Find partners nearby' }, { i: '🔒', t: 'Secure', d: 'Verified profiles & ratings' }, { i: '♻️', t: 'Sustainable', d: 'Give items a second life' }], tr: [{ i: '🤝', t: 'Doğrudan Takas', d: 'Adil değiş tokuş teklifleri' }, { i: '📍', t: 'Konuma Göre', d: 'Yakınındaki partnerleri bul' }, { i: '🔒', t: 'Güvenli', d: 'Onaylı profiller & puanlar' }, { i: '♻️', t: 'Sürdürülebilir', d: 'Eşyalara ikinci şans' }] } },
+            'a-find': { cat: 'Application', name: 'find.', icon: '🔍', bg: 'linear-gradient(135deg,#059669,#34d399)', tag: { en: 'Discovery App', tr: 'Keşif Uygulaması' }, desc: { en: 'Curated discovery platform helping users find meaningful places and experiences.', tr: 'Kullanıcıların anlamlı mekanlar ve deneyimler keşfetmesine yardımcı olan küratörlü platform.' }, link: null, feats: { en: [{ i: '🗺️', t: 'Local Discovery', d: 'Find hidden gems nearby' }, { i: '⭐', t: 'Curated', d: 'Hand-picked by real people' }, { i: '👥', t: 'Community', d: 'Share with friends' }, { i: '📱', t: 'Mobile First', d: 'On-the-go exploration' }], tr: [{ i: '🗺️', t: 'Yerel Keşif', d: 'Yakınındaki gizli mücevherler' }, { i: '⭐', t: 'Küratörlü', d: 'Gerçek insanlar tarafından seçildi' }, { i: '👥', t: 'Topluluk', d: 'Arkadaşlarınla paylaş' }, { i: '📱', t: 'Mobil Önce', d: 'Hareket halinde keşfet' }] } },
+            'a-change': { cat: 'Application', name: 'change.', icon: '🌱', bg: 'linear-gradient(135deg,#d97706,#fbbf24)', tag: { en: 'Social Impact', tr: 'Sosyal Etki' }, desc: { en: 'Social impact platform connecting volunteers and NGOs who want to make a positive difference.', tr: 'Pozitif değişim yaratmak isteyen gönüllüleri ve STK\'ları buluşturan sosyal etki platformu.' }, link: null, feats: { en: [{ i: '🤲', t: 'Volunteer', d: 'Find causes for your skills' }, { i: '📊', t: 'Impact', d: 'Measure contribution' }, { i: '🌍', t: 'Global', d: 'Worldwide network' }, { i: '🏆', t: 'Rewards', d: 'Recognition for impact' }], tr: [{ i: '🤲', t: 'Gönüllü', d: 'Yeteneklerinle uyumlu davalar' }, { i: '📊', t: 'Etki', d: 'Katkını ölç' }, { i: '🌍', t: 'Global', d: 'Dünya çapı ağ' }, { i: '🏆', t: 'Ödüller', d: 'Etkin için tanınma' }] } },
+            'a-materials': { cat: 'Application', name: 'materials.', icon: '🧱', bg: 'linear-gradient(135deg,#0e7490,#22d3ee)', tag: { en: 'Construction Materials', tr: 'İnşaat Malzemeleri' }, desc: { en: 'B2B marketplace for construction materials. Streamlining procurement between suppliers and contractors.', tr: 'İnşaat malzemeleri için B2B pazaryeri. Tedarikçiler ve müteahhitler arasında tedarik süreçlerini kolaylaştırır.' }, link: null, feats: { en: [{ i: '🏭', t: 'Suppliers', d: 'Verified at scale' }, { i: '💰', t: 'Pricing', d: 'Best prices in market' }, { i: '🚚', t: 'Logistics', d: 'Integrated delivery' }, { i: '📋', t: 'Projects', d: 'Manage per project' }], tr: [{ i: '🏭', t: 'Tedarikçiler', d: 'Doğrulanmış, büyük ölçekli' }, { i: '💰', t: 'Fiyatlandırma', d: 'Piyasanın en iyi fiyatları' }, { i: '🚚', t: 'Lojistik', d: 'Entegre teslimat' }, { i: '📋', t: 'Projeler', d: 'Proje başı yönetim' }] } },
+        };
+
+        let cP = [], cI = 0;
+
+        function rGal(i) {
+            cI = (i + cP.length) % cP.length;
+            document.getElementById('galM').src = cP[cI];
+            document.getElementById('galN').textContent = `${cI + 1} / ${cP.length}`;
+            document.querySelectorAll('.g-th').forEach((t, j) => t.classList.toggle('active', j === cI));
+        }
+
+        function show(id) {
+            const d = D[id]; if (!d) return;
+            const l = lang;
+            document.getElementById('mCat').textContent = d.cat;
+            document.getElementById('mName').textContent = d.name;
+            const b = document.getElementById('mBody');
+            if (d.p) {
+                cP = d.p; cI = 0;
+                const th = d.p.map((s, i) => `<div class="g-th${i === 0 ? ' active' : ''}" onclick="rGal(${i})"><img src="${s}" loading="lazy"/></div>`).join('');
+                b.innerHTML = `
+                  <div class="m-left">
+                    <div class="gal-main" style="flex:1;min-height:0;" onclick="rGal(cI+1)">
+                      <img id="galM" src="${d.p[0]}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;display:block;cursor:pointer;"/>
+                      <div class="gal-nav">
+                        <button class="g-btn" onclick="rGal(cI-1)">&#8592;</button>
+                        <button class="g-btn" onclick="rGal(cI+1)">&#8594;</button>
+                      </div>
+                      <div class="g-cnt" id="galN">1 / ${d.p.length}</div>
+                    </div>
+                    <div class="gal-thumbs" style="margin-bottom:0;flex-shrink:0;">${th}</div>
+                  </div>
+                  <div class="m-right">
+                    <p class="m-desc" style="margin-bottom:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${d.desc[l]}</p>
+                    <div class="meta">
+                      <div><span class="mk">Location</span><span class="mv">${d.loc}</span></div>
+                      <div><span class="mk">Year</span><span class="mv">${d.year}</span></div>
+                      <div><span class="mk">Type</span><span class="mv">${d.type[l]}</span></div>
+                    </div>
+                  </div>`;
+            } else {
+                cP = [];
+                const feats = d.feats[l];
+                b.innerHTML = `<div style="padding:20px;display:flex;flex-direction:column;gap:16px;flex:1;overflow-y:auto;">
+                  <div class="a-hero" style="margin-bottom:0;">
+                    <div class="a-ico" style="background:${d.bg}">${d.icon}</div>
+                    <div class="a-txt"><h2>${d.name}</h2><p>${d.tag[l]}</p></div>
+                  </div>
+                  <p class="m-desc" style="margin-bottom:0;">${d.desc[l]}</p>
+                  <div class="feats">${feats.map(f => `<div class="feat"><div class="fi">${f.i}</div><div class="ft">${f.t}</div><div class="fd">${f.d}</div></div>`).join('')}</div>
+                  ${d.link ? `<a href="${d.link}" target="_blank" class="a-link">Open ${d.link.replace('https://', '')}&nbsp;↗</a>` : `<span class="a-link off">${l === 'tr' ? 'Yakında' : 'Coming soon'}</span>`}
+                </div>`;
+            }
+            document.getElementById('overlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeM() { document.getElementById('overlay').classList.remove('open'); document.body.style.overflow = ''; }
+        function closeIf(e) { if (e.target === document.getElementById('overlay')) closeM(); }
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeM();
+            if (e.key === 'ArrowRight' && cP.length) rGal(cI + 1);
+            if (e.key === 'ArrowLeft' && cP.length) rGal(cI - 1);
+        });
+    </script>
+</body>
+
+</html>
