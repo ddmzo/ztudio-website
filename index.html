@@ -8,7 +8,8 @@
     <meta name="description" content="ztudio.co — premium construction, digital design, and innovative apps." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         *,
@@ -17,7 +18,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         :root {
@@ -288,6 +289,42 @@
             gap: 20px;
             align-items: start;
             margin-top: 20px;
+            filter: blur(25px);
+            /* Increased blur for premium feel */
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.6;
+            transition: var(--tr);
+        }
+
+        .blur-overlay {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            text-align: center;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .blur-msg {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 800;
+            color: var(--t);
+            letter-spacing: -0.04em;
+            margin-bottom: 12px;
+            text-transform: lowercase;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .blur-sub {
+            font-size: 14px;
+            color: var(--accent);
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            font-weight: 600;
+            opacity: 0.8;
         }
 
         .col {
@@ -891,9 +928,10 @@
                             <span class="cc-val">+90 532 478 61 59</span>
                         </div>
                         <div class="cc-item">
-                            <span class="cc-label" data-i18n="address">address</span>
-                            <span class="cc-val" style="color: var(--accent); line-height: 1.5;">Dumlupınar Mah. Dr.
-                                Rüstem Eyüboğlu Sok.<br>No: 2/1 Kat: 3 Daire: 5<br>Üsküdar / İstanbul</span>
+                            <span class="cc-lbl" data-i18n="address">address</span>
+                            <span class="cc-val" style="color: var(--accent); line-height: 1.5;">Dumlupınar Mah.
+                                Yumurtacı Abdi Bey Cad.<br>Nuhoğlu Yenitepe Sitesi 1. Etap<br>B/Blok Daire: 30 Kadıköy /
+                                İstanbul</span>
                         </div>
                     </div>
                     <hr class="cc-divider" />
@@ -908,6 +946,10 @@
     </header>
 
     <div class="page">
+        <div class="blur-overlay">
+            <div class="blur-msg" data-i18n="updating">updating portfolio.</div>
+            <div class="blur-sub" data-i18n="coming-soon">coming soon</div>
+        </div>
         <div class="cols">
 
             <!-- CONSTRUCTION -->
