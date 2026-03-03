@@ -285,47 +285,15 @@
         .cols {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 0 28px;
+            gap: 20px;
             align-items: start;
-            /* filter: blur(15px); */
-            /* pointer-events: none; */
-            /* user-select: none; */
+            margin-top: 20px;
         }
 
-        .blur-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 50;
-            text-align: center;
-            width: 100%;
-            pointer-events: none;
-        }
-
-        .blur-msg {
-            font-size: clamp(24px, 5vw, 36px);
-            font-weight: 600;
-            color: var(--t);
-            letter-spacing: -0.02em;
-            margin-bottom: 8px;
-            text-transform: lowercase;
-        }
-
-        .blur-sub {
-            font-size: 13px;
-            color: var(--accent);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            opacity: 0.9;
-            font-weight: 500;
-        }
-
-        /* ── COLUMN ── */
         .col {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 20px;
         }
 
         /* ── COL HEADER ── */
@@ -940,10 +908,6 @@
     </header>
 
     <div class="page">
-        <div class="blur-overlay">
-            <div class="blur-msg" data-i18n="updating">updating portfolio.</div>
-            <div class="blur-sub" data-i18n="coming-soon">coming soon</div>
-        </div>
         <div class="cols">
 
             <!-- CONSTRUCTION -->
