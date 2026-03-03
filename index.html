@@ -3,12 +3,13 @@
 
 <head>
     <meta charset="UTF-8" />
-    <!-- v2.0.1 - Netlify Trigger -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ztudio.co</title>
-    <meta name="description" content="ztudio.co — construction. design. apps." />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet" />
+    <title>ZTUDIO | Elite Design & Construction</title>
+    <meta name="description" content="ztudio.co — premium construction, digital design, and innovative apps." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         *,
         *::before,
@@ -16,7 +17,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Outfit', sans-serif;
         }
 
         :root {
@@ -24,11 +25,13 @@
             --s: #131313;
             --s2: #1c1c1c;
             --b: rgba(255, 255, 255, 0.06);
-            --t: #dedede;
-            --d: #505050;
-            --m: #2e2e2e;
-            --accent: #c8f060;
-            --tr: 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+            --t: #ffffff;
+            --d: #a0a0a0;
+            --m: #505050;
+            --accent: #d4ff3f;
+            /* Trendy Lemon-Green */
+            --accent-muted: rgba(212, 255, 63, 0.1);
+            --tr: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         html {
@@ -49,22 +52,23 @@
             left: 0;
             right: 0;
             z-index: 200;
-            height: 56px;
+            height: 70px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 40px;
+            padding: 0 50px;
             border-bottom: 1px solid var(--b);
-            background: rgba(10, 10, 10, 0.92);
-            backdrop-filter: blur(18px);
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            transition: var(--tr);
         }
 
         .logo {
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 18px;
+            font-weight: 800;
             color: var(--t);
             text-decoration: none;
-            letter-spacing: 0.04em;
+            letter-spacing: -0.02em;
         }
 
         .logo em {
