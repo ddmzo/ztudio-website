@@ -135,17 +135,24 @@
 
         .h-right {
             font-size: 11px;
-            color: var(--d);
-            background: none;
-            border: none;
-            letter-spacing: 0.07em;
+            color: var(--accent);
+            background: rgba(200, 240, 96, 0.05);
+            /* Very subtle green tint */
+            border: 1px solid var(--accent);
+            padding: 6px 16px;
+            border-radius: 100px;
+            letter-spacing: 0.1em;
             cursor: pointer;
-            transition: color .2s;
-            padding: 0;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: 500;
         }
 
         .h-right:hover {
-            color: var(--t);
+            background: var(--accent);
+            color: #111;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(200, 240, 96, 0.3);
         }
 
         .h-actions {
@@ -291,20 +298,21 @@
         }
 
         .blur-msg {
-            font-size: 24px;
-            font-weight: 700;
+            font-size: clamp(24px, 5vw, 36px);
+            font-weight: 600;
             color: var(--t);
-            letter-spacing: 0.1em;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
             text-transform: lowercase;
-            text-shadow: 0 0 20px rgba(0,0,0,0.8);
         }
 
         .blur-sub {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--accent);
-            margin-top: 8px;
             letter-spacing: 0.2em;
             text-transform: uppercase;
+            opacity: 0.9;
+            font-weight: 500;
         }
 
         /* ── COLUMN ── */
@@ -909,10 +917,9 @@
                             <span class="cc-val">+90 532 478 61 59</span>
                         </div>
                         <div class="cc-item">
-                            <span class="cc-lbl">Adres</span>
-                            <span class="cc-val">Dumlupınar Mah. Yumurtacı Abdi Bey Cad.<br />Nuhoğlu Yenitepe Sitesi
-                                1.Etap
-                                B/Blok D:30<br />Kadıköy / İstanbul</span>
+                            <span class="cc-label" data-i18n="address">address</span>
+                            <span class="cc-val" style="color: var(--accent); line-height: 1.5;">Dumlupınar Mah. Dr.
+                                Rüstem Eyüboğlu Sok.<br>No: 2/1 Kat: 3 Daire: 5<br>Üsküdar / İstanbul</span>
                         </div>
                     </div>
                     <hr class="cc-divider" />
