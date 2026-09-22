@@ -291,11 +291,6 @@
             gap: 20px;
             align-items: start;
             margin-top: 20px;
-            filter: blur(25px);
-            /* Increased blur for premium feel */
-            pointer-events: none;
-            user-select: none;
-            opacity: 0.6;
             transition: var(--tr);
         }
 
@@ -396,6 +391,16 @@
             transform: scale(1.05);
         }
 
+        /* Marka karosu: durağan hâli fotoğraflardan bir tık açık (0.6 → 0.72),
+           üstüne gelince diğer kartlarla aynı yere çıkar */
+        .card.app-card-brand {
+            background: #680222;
+        }
+
+        .card-img.brand {
+            filter: brightness(0.72) saturate(0.88);
+        }
+
         .card-video {
             width: 100%;
             height: 100%;
@@ -413,35 +418,24 @@
         .card.app-card {
             background: var(--s2);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px;
         }
 
         .app-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 18px;
+            width: 104px;
+            height: 104px;
+            border-radius: 28px;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 46px;
             transition: transform .35s, box-shadow .35s;
         }
 
         .card.app-card:hover .app-icon {
             transform: scale(1.1);
-        }
-
-        .app-lbl {
-            font-size: 12px;
-            color: var(--t);
-        }
-
-        .app-sub {
-            font-size: 10px;
-            color: var(--d);
         }
 
         /* Card overlay */
@@ -468,6 +462,27 @@
             letter-spacing: 0.07em;
             text-transform: uppercase;
             color: rgba(255, 255, 255, 0.38);
+        }
+
+        .c-soon {
+            font-size: 9px;
+            letter-spacing: 0.07em;
+            color: rgba(255, 255, 255, 0.26);
+            margin-top: 5px;
+        }
+
+        /* Açılmayan kart: tıklama ve uyanma hareketi yok */
+        .card.card-static {
+            cursor: default;
+        }
+
+        .card.card-static:hover {
+            border-color: rgba(255, 255, 255, 0.04);
+            transform: none;
+        }
+
+        .card.card-static:hover .app-icon {
+            transform: none;
         }
 
         /* Arrow */
@@ -638,6 +653,7 @@
             border-radius: 12px;
             overflow: hidden;
             cursor: pointer;
+            background: var(--bg);
         }
 
         .gal-main img {
@@ -701,12 +717,13 @@
 
         .gal-thumbs {
             display: flex;
+            flex-wrap: wrap;
             gap: 6px;
             margin-bottom: 22px;
         }
 
         .g-th {
-            flex: 1;
+            flex: 1 1 64px;
             aspect-ratio: 4/3;
             border-radius: 8px;
             overflow: hidden;
@@ -776,6 +793,7 @@
             width: 72px;
             height: 72px;
             border-radius: 20px;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -849,6 +867,24 @@
         .a-link.off {
             opacity: .35;
             pointer-events: none;
+        }
+
+        .a-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .a-link.ghost {
+            background: transparent;
+            color: var(--d);
+            border: 1px solid var(--b);
+        }
+
+        .a-link.ghost:hover {
+            background: transparent;
+            color: var(--t);
+            border-color: rgba(255, 255, 255, 0.22);
         }
 
         @media(max-width:860px) {
@@ -942,10 +978,6 @@
     </header>
 
     <div class="page">
-        <div class="blur-overlay">
-            <div class="blur-msg" data-i18n="updating">updating portfolio.</div>
-            <div class="blur-sub" data-i18n="coming-soon">coming soon</div>
-        </div>
         <div class="cols">
 
             <!-- CONSTRUCTION -->
@@ -955,8 +987,7 @@
                 </div>
 
                 <div class="card" onclick="show('c-altunizade')">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&q=80"
-                        alt="altunizade" />
+                    <img class="card-img" src="img/altunizade/00-kapak.jpg" alt="altunizade" />
                     <div class="card-info">
                         <div class="c-name">altunizade.</div>
                         <div class="c-sub" data-i18n="sub-res-ist">Residential · İstanbul</div>
@@ -964,55 +995,24 @@
                     <div class="c-arrow">↗</div>
                 </div>
 
-                <div class="card" onclick="show('c-kadikoy')">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80"
-                        alt="kadıköy" />
+                <div class="card" onclick="show('c-altunizade-2')">
+                    <img class="card-img" src="img/altunizade-2/00-kapak.jpg" alt="altunizade" />
                     <div class="card-info">
-                        <div class="c-name">kadıköy.</div>
-                        <div class="c-sub" data-i18n="sub-com-ist">Commercial · İstanbul</div>
-                    </div>
-                    <div class="c-arrow">↗</div>
-                </div>
-
-                <div class="card" onclick="show('c-cekmeköy')">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80"
-                        alt="çekmeköy" />
-                    <div class="card-info">
-                        <div class="c-name">çekmeköy.</div>
+                        <div class="c-name">altunizade.</div>
                         <div class="c-sub" data-i18n="sub-res-ist">Residential · İstanbul</div>
                     </div>
                     <div class="c-arrow">↗</div>
                 </div>
 
-                <div class="card" onclick="show('c-uskudar')">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1486134786765-a8e368f3cd89?w=600&q=80"
-                        alt="üsküdar" />
+                <div class="card" onclick="show('c-acibadem')">
+                    <img class="card-img" src="img/acibadem/01-render.jpg" alt="acıbadem" />
                     <div class="card-info">
-                        <div class="c-name">üsküdar.</div>
-                        <div class="c-sub" data-i18n="sub-mix-ist">Mixed Use · İstanbul</div>
+                        <div class="c-name">acıbadem.</div>
+                        <div class="c-sub" data-i18n="sub-acibadem">Residential · İstanbul · 2027</div>
                     </div>
                     <div class="c-arrow">↗</div>
                 </div>
 
-                <div class="card" onclick="show('c-antalya')">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80"
-                        alt="antalya" />
-                    <div class="card-info">
-                        <div class="c-name">antalya.</div>
-                        <div class="c-sub" data-i18n="sub-resort">Resort · Antalya</div>
-                    </div>
-                    <div class="c-arrow">↗</div>
-                </div>
-
-                <div class="card" onclick="show('c-london')">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80"
-                        alt="ingiltere" />
-                    <div class="card-info">
-                        <div class="c-name">i̇ngiltere.</div>
-                        <div class="c-sub" data-i18n="sub-res-lon">Residential · London</div>
-                    </div>
-                    <div class="c-arrow">↗</div>
-                </div>
             </div>
 
             <!-- DESIGN -->
@@ -1021,49 +1021,12 @@
                     <span class="col-head-title" data-i18n="des-head">design.</span>
                 </div>
 
-                <div class="card" onclick="show('d-1')">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"
-                        alt="series i" />
+                <div class="card card-static" style="background:var(--s2)">
                     <div class="card-info">
-                        <div class="c-name">series i.</div>
-                        <div class="c-sub" data-i18n="sub-dart">Digital Art · 2024</div>
+                        <div class="c-soon" data-i18n="soon">(coming soon)</div>
                     </div>
-                    <div class="c-arrow">↗</div>
                 </div>
 
-                <div class="card" onclick="show('d-2')">
-                    <video class="card-video" autoplay muted loop playsinline>
-                        <source src="https://videos.pexels.com/video-files/2022396/2022396-uhd_2560_1440_25fps.mp4"
-                            type="video/mp4" />
-                    </video>
-                    <div class="card-info">
-                        <div class="c-name">series ii.</div>
-                        <div class="c-sub" data-i18n="sub-gen">Generative · 2024</div>
-                    </div>
-                    <div class="c-arrow">↗</div>
-                </div>
-
-                <div class="card" onclick="show('d-3')">
-                    <video class="card-video" autoplay muted loop playsinline>
-                        <source src="https://videos.pexels.com/video-files/3214180/3214180-uhd_2560_1440_25fps.mp4"
-                            type="video/mp4" />
-                    </video>
-                    <div class="card-info">
-                        <div class="c-name">motion.</div>
-                        <div class="c-sub" data-i18n="sub-motion">Motion Design · 2023</div>
-                    </div>
-                    <div class="c-arrow">↗</div>
-                </div>
-
-                <div class="card" onclick="show('d-4')">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1622737133809-d95047b9e673?w=600&q=80"
-                        alt="identity" />
-                    <div class="card-info">
-                        <div class="c-name">identity.</div>
-                        <div class="c-sub" data-i18n="sub-brand">Brand Design · 2023</div>
-                    </div>
-                    <div class="c-arrow">↗</div>
-                </div>
             </div>
 
             <!-- APPS -->
@@ -1072,32 +1035,26 @@
                     <span class="col-head-title" data-i18n="app-head">apps.</span>
                 </div>
 
-                <div class="card app-card" onclick="show('a-find')">
-                    <div class="app-icon"
-                        style="background:linear-gradient(135deg,#059669,#34d399);box-shadow:0 14px 36px rgba(5,150,105,.3)">
-                        🔍</div>
-                    <div class="app-lbl">find.</div>
-                    <div class="app-sub" data-i18n="sub-find">Discovery</div>
+                <div class="card app-card app-card-brand" onclick="show('a-nartakas')">
+                    <img class="card-img brand" src="img/nartakas-icon.png" alt="NarTakas" />
+                    <div class="card-info">
+                        <div class="c-name">nartakas.</div>
+                        <div class="c-sub" data-i18n="sub-nartakas">Marketplace</div>
+                    </div>
                     <div class="c-arrow">↗</div>
                 </div>
 
-                <div class="card app-card" onclick="show('a-change')">
-                    <div class="app-icon"
-                        style="background:linear-gradient(135deg,#d97706,#fbbf24);box-shadow:0 14px 36px rgba(217,119,6,.3)">
-                        🌱</div>
-                    <div class="app-lbl">change.</div>
-                    <div class="app-sub" data-i18n="sub-change">Social Impact</div>
-                    <div class="c-arrow">↗</div>
+                <div class="card app-card card-static">
+                    <div class="app-icon" style="background:var(--bg)">
+                        <img src="img/find-icon.png" alt="find"
+                            style="width:100%;height:100%;object-fit:contain;padding:9px;display:block" /></div>
+                    <div class="card-info">
+                        <div class="c-name">find.</div>
+                        <div class="c-sub" data-i18n="sub-find">Discovery</div>
+                        <div class="c-soon" data-i18n="soon">(coming soon)</div>
+                    </div>
                 </div>
 
-                <div class="card app-card" onclick="show('a-materials')">
-                    <div class="app-icon"
-                        style="background:linear-gradient(135deg,#0e7490,#22d3ee);box-shadow:0 14px 36px rgba(14,116,144,.3)">
-                        🧱</div>
-                    <div class="app-lbl">materials.</div>
-                    <div class="app-sub" data-i18n="sub-mat">Construction</div>
-                    <div class="c-arrow">↗</div>
-                </div>
             </div>
 
         </div>
@@ -1105,7 +1062,7 @@
 
     <footer>
         <div class="f-logo">ztudio<em>.</em>co</div>
-        <div class="f-copy" data-i18n="copy">© 2025 ztudio. All rights reserved.</div>
+        <div class="f-copy" data-i18n="copy">© 2026 ZHD İç ve Dış Limited Şirketi — ztudio is a brand of ZHD İç ve Dış Limited Şirketi. All rights reserved.</div>
     </footer>
 
     <!-- MODAL -->
@@ -1130,6 +1087,7 @@
                 'des-head': 'design.',
                 'app-head': 'apps.',
                 'sub-res-ist': 'Residential · İstanbul',
+                'sub-acibadem': 'Residential · İstanbul · 2027',
                 'sub-com-ist': 'Commercial · İstanbul',
                 'sub-mix-ist': 'Mixed Use · İstanbul',
                 'sub-resort': 'Resort · Antalya',
@@ -1138,11 +1096,13 @@
                 'sub-gen': 'Generative · 2024',
                 'sub-motion': 'Motion Design · 2023',
                 'sub-brand': 'Brand Design · 2023',
+                'sub-nartakas': 'Marketplace',
                 'sub-find': 'Discovery',
+                'soon': '(coming soon)',
                 'sub-change': 'Social Impact',
                 'sub-mat': 'Construction',
                 'hello': 'say hello.',
-                'copy': '© 2025 ztudio. All rights reserved.',
+                'copy': '© 2026 ZHD İç ve Dış Limited Şirketi — ztudio is a brand of ZHD İç ve Dış Limited Şirketi. All rights reserved.',
                 'updating': 'updating projects.',
                 'coming-soon': 'coming soon',
             },
@@ -1151,6 +1111,7 @@
                 'des-head': 'tasarım.',
                 'app-head': 'uygulamalar.',
                 'sub-res-ist': 'Konut · İstanbul',
+                'sub-acibadem': 'Konut · İstanbul · 2027',
                 'sub-com-ist': 'Ticari · İstanbul',
                 'sub-mix-ist': 'Karma Kullanım · İstanbul',
                 'sub-resort': 'Tatil Köyü · Antalya',
@@ -1159,11 +1120,13 @@
                 'sub-gen': 'Üretimsel · 2024',
                 'sub-motion': 'Hareket Tasarımı · 2023',
                 'sub-brand': 'Marka Tasarımı · 2023',
+                'sub-nartakas': 'Pazaryeri',
                 'sub-find': 'Keşif',
+                'soon': '(yakında)',
                 'sub-change': 'Sosyal Etki',
                 'sub-mat': 'İnşaat',
                 'hello': 'merhaba de.',
-                'copy': '© 2025 ztudio. Tüm hakları saklıdır.',
+                'copy': '© 2026 ZHD İç ve Dış Limited Şirketi — ztudio, ZHD İç ve Dış Limited Şirketi markasıdır. Tüm hakları saklıdır.',
                 'updating': 'projeler güncelleniyor.',
                 'coming-soon': 'yakında',
             }
@@ -1204,19 +1167,11 @@
 
         /* ── DATA ── */
         const D = {
-            'c-altunizade': { cat: 'Construction · İstanbul', name: 'altunizade.', desc: { en: 'Premium residential project in Altunizade. Modern architecture meeting functional elegance across 12 units.', tr: 'Altunizade\'de premium konut projesi. 12 ünite boyunca modern mimari ve işlevsel zarafet.' }, loc: 'Altunizade, İstanbul', year: '2023', type: { en: 'Residential', tr: 'Konut' }, p: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=900&q=85', 'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=600', 'https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600', 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600'] },
-            'c-kadikoy': { cat: 'Construction · İstanbul', name: 'kadıköy.', desc: { en: 'Commercial transformation in Kadıköy. Mixed-use with retail ground floor and creative offices above.', tr: 'Kadıköy\'de ticari dönüşüm. Zemin kat perakende ve üst katlarda yaratıcı ofisler.' }, loc: 'Kadıköy, İstanbul', year: '2023', type: { en: 'Commercial', tr: 'Ticari' }, p: ['https://images.unsplash.com/photo-1486325212027-8081e485255e?w=900&q=85', 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600', 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600', 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?w=600'] },
-            'c-cekmeköy': { cat: 'Construction · İstanbul', name: 'çekmeköy.', desc: { en: 'Suburban residential on the Asian side of Istanbul. Landscaped communal areas and sustainable design.', tr: 'İstanbul Anadolu yakasında banliyö konut projesi. Peyzajlı ortak alanlar ve sürdürülebilir tasarım.' }, loc: 'Çekmeköy, İstanbul', year: '2022', type: { en: 'Residential', tr: 'Konut' }, p: ['https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=900&q=85', 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=600', 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=600', 'https://images.unsplash.com/photo-1556020685-ae41abfc9365?w=600'] },
-            'c-uskudar': { cat: 'Construction · İstanbul', name: 'üsküdar.', desc: { en: 'Mixed-use blending historic Üsküdar with contemporary design. 8 residential floors.', tr: 'Tarihi Üsküdar karakterini çağdaş tasarımla harmanlayan karma kullanım. 8 konut katı.' }, loc: 'Üsküdar, İstanbul', year: '2024', type: { en: 'Mixed Use', tr: 'Karma Kullanım' }, p: ['https://images.unsplash.com/photo-1486134786765-a8e368f3cd89?w=900&q=85', 'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=600', 'https://images.unsplash.com/photo-1471039497385-b6d6ba609f9c?w=600', 'https://images.unsplash.com/photo-1453306458620-5bbef13a5bca?w=600'] },
-            'c-antalya': { cat: 'Construction · Antalya', name: 'antalya.', desc: { en: 'Mediterranean resort residential with panoramic sea views, private pools and premium finishing.', tr: 'Panoramik deniz manzarası, özel havuzlar ve premium detaylarla Akdeniz tatil konutu.' }, loc: 'Konyaaltı, Antalya', year: '2024', type: { en: 'Resort', tr: 'Tatil Köyü' }, p: ['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&q=85', 'https://images.unsplash.com/photo-1575517111478-7f6afd0973db?w=600', 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600', 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600'] },
-            'c-london': { cat: 'Construction · London', name: 'i̇ngiltere.', desc: { en: 'Premium refurbishment in Central London. Full interior redesign and structural upgrades to a Georgian townhouse.', tr: 'Merkezi Londra\'da premium tadilat. Gürcü dönemi şehir evinde tam iç tasarım ve yapısal yükseltme.' }, loc: 'Central London, UK', year: '2023', type: { en: 'Refurbishment', tr: 'Tadilat' }, p: ['https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&q=85', 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600', 'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=600', 'https://images.unsplash.com/photo-1616137422495-1e9e46e2aa77?w=600'] },
-            'd-1': { cat: 'Digital Art · 2024', name: 'series i.', desc: { en: 'Digital visual art series at the intersection of urban architecture and abstract form. 24 unique pieces.', tr: 'Kentsel mimari ve soyut formun kesişiminde dijital görsel sanat serisi. 24 özgün eser.' }, loc: 'Digital', year: '2024', type: { en: 'Digital Art', tr: 'Dijital Sanat' }, p: ['https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=85', 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600', 'https://images.unsplash.com/photo-1563089145-599997674d42?w=600', 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600'] },
-            'd-2': { cat: 'Generative Art · 2024', name: 'series ii.', desc: { en: 'Generative art using algorithmic processes to create unique visual compositions. Each piece is one-of-one.', tr: 'Benzersiz görsel kompozisyonlar oluşturmak için algoritmik süreçler kullanan üretimsel sanat. Her eser tektir.' }, loc: 'Digital', year: '2024', type: { en: 'Generative', tr: 'Üretimsel' }, p: ['https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=900&q=85', 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=600', 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600', 'https://images.unsplash.com/photo-1637858868799-7f26a0640eb6?w=600'] },
-            'd-3': { cat: 'Motion Design · 2023', name: 'motion.', desc: { en: 'Motion design for brand communications, digital platforms and installation art. Fluid, purposeful movement.', tr: 'Marka iletişimi, dijital platformlar ve enstalasyon sanatı için hareket tasarımı. Akıcı ve amaçlı hareket.' }, loc: 'Digital', year: '2023', type: { en: 'Motion', tr: 'Hareket' }, p: ['https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=900&q=85', 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600', 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600', 'https://images.unsplash.com/photo-1558655146-d09347e92766?w=600'] },
-            'd-4': { cat: 'Brand Design · 2023', name: 'identity.', desc: { en: 'Brand identity systems for construction and tech companies. Visual storytelling through consistent, bold design.', tr: 'İnşaat ve teknoloji şirketleri için marka kimlik sistemleri. Tutarlı ve cesur tasarım aracılığıyla görsel hikaye anlatımı.' }, loc: 'İstanbul', year: '2023', type: { en: 'Branding', tr: 'Marka' }, p: ['https://images.unsplash.com/photo-1622737133809-d95047b9e673?w=900&q=85', 'https://images.unsplash.com/photo-1600132806608-231446b2e7af?w=600', 'https://images.unsplash.com/photo-1634070347873-44e0f99a9b71?w=600', 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600'] },
-            'a-find': { cat: 'Application', name: 'find.', icon: '🔍', bg: 'linear-gradient(135deg,#059669,#34d399)', tag: { en: 'Discovery App', tr: 'Keşif Uygulaması' }, desc: { en: 'Curated discovery platform helping users find meaningful places and experiences.', tr: 'Kullanıcıların anlamlı mekanlar ve deneyimler keşfetmesine yardımcı olan küratörlü platform.' }, link: null, feats: { en: [{ i: '🗺️', t: 'Local Discovery', d: 'Find hidden gems nearby' }, { i: '⭐', t: 'Curated', d: 'Hand-picked by real people' }, { i: '👥', t: 'Community', d: 'Share with friends' }, { i: '📱', t: 'Mobile First', d: 'On-the-go exploration' }], tr: [{ i: '🗺️', t: 'Yerel Keşif', d: 'Yakınındaki gizli mücevherler' }, { i: '⭐', t: 'Küratörlü', d: 'Gerçek insanlar tarafından seçildi' }, { i: '👥', t: 'Topluluk', d: 'Arkadaşlarınla paylaş' }, { i: '📱', t: 'Mobil Önce', d: 'Hareket halinde keşfet' }] } },
-            'a-change': { cat: 'Application', name: 'change.', icon: '🌱', bg: 'linear-gradient(135deg,#d97706,#fbbf24)', tag: { en: 'Social Impact', tr: 'Sosyal Etki' }, desc: { en: 'Social impact platform connecting volunteers and NGOs who want to make a positive difference.', tr: 'Pozitif değişim yaratmak isteyen gönüllüleri ve STK\'ları buluşturan sosyal etki platformu.' }, link: null, feats: { en: [{ i: '🤲', t: 'Volunteer', d: 'Find causes for your skills' }, { i: '📊', t: 'Impact', d: 'Measure contribution' }, { i: '🌍', t: 'Global', d: 'Worldwide network' }, { i: '🏆', t: 'Rewards', d: 'Recognition for impact' }], tr: [{ i: '🤲', t: 'Gönüllü', d: 'Yeteneklerinle uyumlu davalar' }, { i: '📊', t: 'Etki', d: 'Katkını ölç' }, { i: '🌍', t: 'Global', d: 'Dünya çapı ağ' }, { i: '🏆', t: 'Ödüller', d: 'Etkin için tanınma' }] } },
-            'a-materials': { cat: 'Application', name: 'materials.', icon: '🧱', bg: 'linear-gradient(135deg,#0e7490,#22d3ee)', tag: { en: 'Construction Materials', tr: 'İnşaat Malzemeleri' }, desc: { en: 'B2B marketplace for construction materials. Streamlining procurement between suppliers and contractors.', tr: 'İnşaat malzemeleri için B2B pazaryeri. Tedarikçiler ve müteahhitler arasında tedarik süreçlerini kolaylaştırır.' }, link: null, feats: { en: [{ i: '🏭', t: 'Suppliers', d: 'Verified at scale' }, { i: '💰', t: 'Pricing', d: 'Best prices in market' }, { i: '🚚', t: 'Logistics', d: 'Integrated delivery' }, { i: '📋', t: 'Projects', d: 'Manage per project' }], tr: [{ i: '🏭', t: 'Tedarikçiler', d: 'Doğrulanmış, büyük ölçekli' }, { i: '💰', t: 'Fiyatlandırma', d: 'Piyasanın en iyi fiyatları' }, { i: '🚚', t: 'Lojistik', d: 'Entegre teslimat' }, { i: '📋', t: 'Projeler', d: 'Proje başı yönetim' }] } },
+            'c-altunizade': { cat: 'Construction · İstanbul', name: 'altunizade.', desc: { en: 'An 11-apartment residential project in Altunizade.', tr: 'Altunizade\'de 11 daireli konut projesi.' }, loc: 'Altunizade, İstanbul', year: '2023', type: { en: 'Residential', tr: 'Konut' }, p: ['img/altunizade/00-kapak.jpg', 'img/altunizade/01-dis-cephe-aksam.jpg', 'img/altunizade/02-dis-cephe.jpg', 'img/altunizade/03-balkon-detay.jpg', 'img/altunizade/04-sokak.jpg', 'img/altunizade/05-bahce.jpg', 'img/altunizade/06-kat-holu.jpg', 'img/altunizade/07-asansor.jpg', 'img/altunizade/08-koridor-mutfak.jpg', 'img/altunizade/09-giris-holu.jpg', 'img/altunizade/10-koridor.jpg', 'img/altunizade/11-salon-parke.jpg', 'img/altunizade/12-mutfak.jpg', 'img/altunizade/13-mutfak-ceviz.jpg', 'img/altunizade/14-mutfak-bej.jpg', 'img/altunizade/15-banyo-yesil.jpg', 'img/altunizade/16-banyo.jpg', 'img/altunizade/17-otopark.jpg'] },
+            'c-altunizade-2': { cat: 'Construction · İstanbul', name: 'altunizade.', desc: { en: 'A 14-apartment residential project in Altunizade.', tr: 'Altunizade\'de 14 daireli konut projesi.' }, loc: 'Altunizade, İstanbul', year: '2025', type: { en: 'Residential', tr: 'Konut' }, p: ['img/altunizade-2/01-dis-cephe.jpg', 'img/altunizade-2/02-dis-cephe-gun-batimi.jpg', 'img/altunizade-2/03-yan-cephe.jpg', 'img/altunizade-2/04-giris.jpg', 'img/altunizade-2/05-mutfak.jpg', 'img/altunizade-2/06-mutfak-beyaz.jpg'] },
+            'c-acibadem': { cat: 'Construction · İstanbul', name: 'acıbadem.', desc: { en: 'An 18-apartment residential project in Acıbadem. Construction begins in 2027.', tr: 'Acıbadem\'de 18 daireli konut projesi. Yapımına 2027\'de başlanacak.' }, loc: 'Acıbadem, İstanbul', year: '2027', type: { en: 'Residential', tr: 'Konut' }, p: ['img/acibadem/01-render.jpg'] },
+            'a-nartakas': { cat: 'Application · Live', name: 'nartakas.', icon: '<img src="img/nartakas-icon.png" alt="NarTakas" style="width:100%;height:100%;object-fit:cover;display:block"/>', bg: '#680222', tag: { en: 'Buy, sell, swap · iOS & Android', tr: 'Al, sat, takasla · iOS ve Android' }, desc: { en: 'Turkey\'s marketplace. Every listing is for sale — but you decide what happens to it: sell it, swap it, gift it or pass it on.', tr: 'Türkiye\'nin pazaryeri. Her ilan satılık — ama ne olacağına sen karar verirsin: sat, takasla, hediye et ya da askıya bırak.' }, link: 'https://nartakas.app', stores: { ios: 'https://apps.apple.com/app/id6764345589', android: 'https://play.google.com/store/apps/details?id=co.ztudio.nartakas' }, feats: { en: [{ i: '🏷️', t: 'Buy & Sell', d: 'Set your price, find a buyer' }, { i: '🔄', t: 'Swap', d: 'Trade item for item' }, { i: '🎁', t: 'Gift', d: 'Pass on what you don\'t use' }, { i: '🤝', t: 'Pay It Forward', d: 'Reach people in need' }], tr: [{ i: '🏷️', t: 'Al & Sat', d: 'Fiyatını koy, alıcısını bul' }, { i: '🔄', t: 'Takas', d: 'Eşyanı eşyayla değiştir' }, { i: '🎁', t: 'Hediye', d: 'Kullanmadığını hediye et' }, { i: '🤝', t: 'Askıda', d: 'İhtiyaç sahibine ulaştır' }] } },
+            'a-find': { cat: 'Application', name: 'find.', icon: '<img src="img/find-icon.png" alt="find" style="width:100%;height:100%;object-fit:contain;padding:10px;display:block"/>', bg: '#fdf3dd', tag: { en: 'Discovery App', tr: 'Keşif Uygulaması' }, desc: { en: 'Curated discovery platform helping users find meaningful places and experiences.', tr: 'Kullanıcıların anlamlı mekanlar ve deneyimler keşfetmesine yardımcı olan küratörlü platform.' }, link: null, feats: { en: [{ i: '🗺️', t: 'Local Discovery', d: 'Find hidden gems nearby' }, { i: '⭐', t: 'Curated', d: 'Hand-picked by real people' }, { i: '👥', t: 'Community', d: 'Share with friends' }, { i: '📱', t: 'Mobile First', d: 'On-the-go exploration' }], tr: [{ i: '🗺️', t: 'Yerel Keşif', d: 'Yakınındaki gizli mücevherler' }, { i: '⭐', t: 'Küratörlü', d: 'Gerçek insanlar tarafından seçildi' }, { i: '👥', t: 'Topluluk', d: 'Arkadaşlarınla paylaş' }, { i: '📱', t: 'Mobil Önce', d: 'Hareket halinde keşfet' }] } },
         };
 
         let cP = [], cI = 0;
@@ -1236,18 +1191,21 @@
             const b = document.getElementById('mBody');
             if (d.p) {
                 cP = d.p; cI = 0;
-                const th = d.p.map((s, i) => `<div class="g-th${i === 0 ? ' active' : ''}" onclick="rGal(${i})"><img src="${s}" loading="lazy"/></div>`).join('');
+                /* Tek görselli projede şerit, oklar ve sayaç gizlenir:
+                   tek küçük resim bütün genişliğe yayılıp görseli eziyordu */
+                const multi = d.p.length > 1;
+                const th = multi ? d.p.map((s, i) => `<div class="g-th${i === 0 ? ' active' : ''}" onclick="rGal(${i})"><img src="${s}" loading="lazy"/></div>`).join('') : '';
                 b.innerHTML = `
                   <div class="m-left">
-                    <div class="gal-main" style="flex:1;min-height:0;" onclick="rGal(cI+1)">
-                      <img id="galM" src="${d.p[0]}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;display:block;cursor:pointer;"/>
-                      <div class="gal-nav">
+                    <div class="gal-main" style="flex:1;min-height:0;" ${multi ? 'onclick="rGal(cI+1)"' : ''}>
+                      <img id="galM" src="${d.p[0]}" style="width:100%;height:100%;object-fit:contain;border-radius:10px;display:block;${multi ? 'cursor:pointer;' : ''}"/>
+                      ${multi ? `<div class="gal-nav">
                         <button class="g-btn" onclick="rGal(cI-1)">&#8592;</button>
                         <button class="g-btn" onclick="rGal(cI+1)">&#8594;</button>
                       </div>
-                      <div class="g-cnt" id="galN">1 / ${d.p.length}</div>
+                      <div class="g-cnt" id="galN">1 / ${d.p.length}</div>` : ''}
                     </div>
-                    <div class="gal-thumbs" style="margin-bottom:0;flex-shrink:0;">${th}</div>
+                    ${multi ? `<div class="gal-thumbs" style="margin-bottom:0;flex-shrink:0;">${th}</div>` : ''}
                   </div>
                   <div class="m-right">
                     <p class="m-desc" style="margin-bottom:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${d.desc[l]}</p>
@@ -1267,7 +1225,7 @@
                   </div>
                   <p class="m-desc" style="margin-bottom:0;">${d.desc[l]}</p>
                   <div class="feats">${feats.map(f => `<div class="feat"><div class="fi">${f.i}</div><div class="ft">${f.t}</div><div class="fd">${f.d}</div></div>`).join('')}</div>
-                  ${d.link ? `<a href="${d.link}" target="_blank" class="a-link">Open ${d.link.replace('https://', '')}&nbsp;↗</a>` : `<span class="a-link off">${l === 'tr' ? 'Yakında' : 'Coming soon'}</span>`}
+                  ${d.stores ? `<div class="a-links"><a href="${d.stores.ios}" target="_blank" class="a-link">App Store&nbsp;↗</a><a href="${d.stores.android}" target="_blank" class="a-link">Google Play&nbsp;↗</a>${d.link ? `<a href="${d.link}" target="_blank" class="a-link ghost">${d.link.replace('https://', '')}&nbsp;↗</a>` : ''}</div>` : d.link ? `<a href="${d.link}" target="_blank" class="a-link">Open ${d.link.replace('https://', '')}&nbsp;↗</a>` : `<span class="a-link off">${l === 'tr' ? 'Yakında' : 'Coming soon'}</span>`}
                 </div>`;
             }
             document.getElementById('overlay').classList.add('open');
