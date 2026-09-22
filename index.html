@@ -902,10 +902,6 @@
                 gap: 0 8px;
             }
 
-            .col:last-child {
-                display: none;
-            }
-
             footer {
                 padding: 20px;
                 flex-direction: column;
@@ -927,9 +923,30 @@
             .cols {
                 grid-template-columns: 1fr;
             }
+        }
 
-            .col:last-child {
-                display: flex;
+        /* ── DOKUNMATİK EKRANLAR ──
+           Telefonda :hover parmağa yapışıyor: kaydırırken dokunulan kart
+           büyümüş hâlde kalıyor, içine zoom yapılmış gibi görünüyordu.
+           Faresi olan cihazlar bu bloktan etkilenmez. */
+        @media (hover: none) {
+
+            .card:hover,
+            .card:hover .card-img,
+            .card.app-card:hover .app-icon,
+            .a-link:hover,
+            .h-right:hover {
+                transform: none;
+            }
+
+            /* Hover olmadığı için kalıcı göster */
+            .c-arrow {
+                opacity: 1;
+                transform: none;
+            }
+
+            .gal-nav {
+                opacity: 1;
             }
         }
     </style>
@@ -958,11 +975,15 @@
                     <div class="cc-logo">ztudio<em>.</em>co</div>
                     <div class="cc-row">
                         <div class="cc-item">
-                            <span class="cc-lbl">E-mail</span>
+                            <span class="cc-lbl" data-i18n="company">Company</span>
+                            <span class="cc-val">ZHD İç ve Dış Limited Şirketi</span>
+                        </div>
+                        <div class="cc-item">
+                            <span class="cc-lbl" data-i18n="email">E-mail</span>
                             <a class="cc-val" href="mailto:hello@ztudio.co">hello@ztudio.co</a>
                         </div>
                         <div class="cc-item">
-                            <span class="cc-lbl">Telefon</span>
+                            <span class="cc-lbl" data-i18n="phone">Phone</span>
                             <span class="cc-val">+90 532 478 61 59</span>
                         </div>
                         <div class="cc-item">
@@ -1102,6 +1123,10 @@
                 'sub-change': 'Social Impact',
                 'sub-mat': 'Construction',
                 'hello': 'say hello.',
+                'company': 'Company',
+                'email': 'E-mail',
+                'phone': 'Phone',
+                'address': 'Address',
                 'copy': '© 2026 ZHD İç ve Dış Limited Şirketi — ztudio is a brand of ZHD İç ve Dış Limited Şirketi. All rights reserved.',
                 'updating': 'updating projects.',
                 'coming-soon': 'coming soon',
@@ -1126,6 +1151,10 @@
                 'sub-change': 'Sosyal Etki',
                 'sub-mat': 'İnşaat',
                 'hello': 'merhaba de.',
+                'company': 'ŞİRKET',
+                'email': 'E-POSTA',
+                'phone': 'TELEFON',
+                'address': 'ADRES',
                 'copy': '© 2026 ZHD İç ve Dış Limited Şirketi — ztudio, ZHD İç ve Dış Limited Şirketi markasıdır. Tüm hakları saklıdır.',
                 'updating': 'projeler güncelleniyor.',
                 'coming-soon': 'yakında',
