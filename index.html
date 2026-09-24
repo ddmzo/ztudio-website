@@ -580,7 +580,6 @@
             inset: 0;
             z-index: 1000;
             background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(16px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -590,9 +589,13 @@
             transition: opacity .3s, visibility .3s;
         }
 
+        /* Bulanıklık yalnız pencere açıkken kurulur; kapalıyken tam ekran
+           bir bulanıklık katmanını canlı tutmak telefonda kaydırmayı
+           tutukluyordu. */
         .overlay.open {
             opacity: 1;
             visibility: visible;
+            backdrop-filter: blur(16px);
         }
 
         .modal {
@@ -967,6 +970,24 @@
                 flex-direction: column;
                 text-align: center;
             }
+
+            /* Dar ekranda küçük resimler tek satırda, yana kaydırmalı.
+               Satırlara yayılınca şerit 272px'e çıkıp asıl fotoğrafa
+               149px bırakıyordu. */
+            .gal-thumbs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                overscroll-behavior-x: contain;
+                scrollbar-width: none;
+            }
+
+            .gal-thumbs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .g-th {
+                flex: 0 0 54px;
+            }
         }
 
         @media(max-width:560px) {
@@ -981,12 +1002,28 @@
            Faresi olan cihazlar bu bloktan etkilenmez. */
         @media (hover: none) {
 
+            /* Dokunmatikte bulanık zemin yerine düz renk: sabit başlık ve
+               üç yapışkan sütun başlığı aynı anda bulanıklık hesaplayınca
+               kaydırma tutukluyor. */
+            header,
+            .col-head {
+                backdrop-filter: none;
+                background: #0a0a0a;
+            }
+
             .card:hover,
             .card:hover .card-img,
             .card.app-card:hover .app-icon,
             .a-link:hover,
             .h-right:hover {
                 transform: none;
+            }
+
+            /* Kapatma düğmesi parmakla rahat vurulacak boyutta */
+            .m-x {
+                width: 40px;
+                height: 40px;
+                font-size: 15px;
             }
 
             /* Hover olmadığı için kalıcı göster */
