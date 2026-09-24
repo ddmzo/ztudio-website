@@ -285,13 +285,15 @@
         }
 
         /* ── 3-COLUMN GRID ── */
+        /* minmax(0, 1fr): sütun genişliği içerikten değil paydan gelir.
+           Düz 1fr'de iPhone Safari adres çubuğu küçülürken sütun
+           genişliyor, kare kartlar uzuyor, alttakiler itiliyordu. */
         .cols {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 20px;
             align-items: start;
             margin-top: 20px;
-            transition: var(--tr);
         }
 
         .blur-overlay {
@@ -328,6 +330,7 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            min-width: 0;
         }
 
         /* ── COL HEADER ── */
@@ -406,6 +409,9 @@
             overflow: hidden;
             cursor: pointer;
             aspect-ratio: 1;
+            min-width: 0;
+            min-height: 0;
+            flex-shrink: 0;
             border: 1px solid rgba(255, 255, 255, 0.04);
             border-radius: 14px;
             margin: 0 10px;
@@ -418,7 +424,11 @@
             z-index: 5;
         }
 
+        /* Görsel akış dışında: kartın ölçüsünü görselin boyutu değil,
+           sütun genişliği + kare oran belirler. */
         .card-img {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -951,7 +961,7 @@
             }
 
             .cols {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
                 gap: 0 8px;
             }
 
@@ -992,7 +1002,7 @@
 
         @media(max-width:560px) {
             .cols {
-                grid-template-columns: 1fr;
+                grid-template-columns: minmax(0, 1fr);
             }
         }
 
