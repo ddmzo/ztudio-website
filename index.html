@@ -772,35 +772,6 @@
             white-space: nowrap;
         }
 
-        .gal-toggle {
-            padding: 7px 10px;
-            border: 1px solid rgba(212, 255, 63, .3);
-            border-radius: 8px;
-            background: var(--accent-muted);
-            color: var(--accent);
-            font-size: 10px;
-            cursor: pointer;
-        }
-
-        .gal-overview {
-            position: absolute;
-            inset: 0;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            align-content: start;
-            gap: 8px;
-            padding: 8px;
-            overflow-y: auto;
-            overscroll-behavior: contain;
-            background: var(--bg);
-        }
-
-        .gal-overview[hidden] {
-            display: none;
-        }
-
-        .gal-toggle:focus-visible,
         .g-th:focus-visible {
             outline: 2px solid var(--accent);
             outline-offset: -2px;
@@ -840,30 +811,6 @@
             border: 2px solid transparent;
             transition: border-color .2s, opacity .2s;
             opacity: .85;
-        }
-
-        .g-th-num {
-            position: absolute;
-            bottom: 2px;
-            right: 2px;
-            padding: 1px 4px;
-            border-radius: 4px;
-            font-size: 9px;
-            line-height: 1.4;
-            color: #fff;
-            background: rgba(0, 0, 0, .8);
-        }
-
-        .g-th.active .g-th-num {
-            color: #111;
-            background: var(--accent);
-        }
-
-        /* Alttaki şeritte numara yok: sayaç zaten yazıyor, her karede
-           rakam gözü yoruyordu. Numaralar yalnız "Tüm fotoğraflar"
-           ızgarasında kalır. */
-        .gal-thumbs .g-th-num {
-            display: none;
         }
 
         .g-th.active {
@@ -1413,40 +1360,6 @@
             syncGalThumb();
         }
 
-        function toggleGalOverview(open) {
-            const overview = document.getElementById('galAll');
-            const toggle = document.getElementById('galToggle');
-            if (!overview || !toggle) return;
-            const expanded = typeof open === 'boolean' ? open : overview.hidden;
-            overview.hidden = !expanded;
-            toggle.setAttribute('aria-expanded', String(expanded));
-            toggle.textContent = expanded
-                ? (lang === 'tr' ? 'Fotoğrafa dön' : 'Back to photo')
-                : (lang === 'tr' ? 'Tüm fotoğraflar' : 'All photos') + ' (' + cP.length + ')';
-            if (expanded) {
-                const active = overview.querySelector('.g-th.active');
-                if (active) {
-                    active.focus({ preventScroll: true });
-                    const box = active.getBoundingClientRect();
-                    const area = overview.getBoundingClientRect();
-                    overview.scrollTop += box.top - area.top - (overview.clientHeight - box.height) / 2;
-                }
-            } else {
-                toggle.focus({ preventScroll: true });
-                syncGalThumb();
-            }
-        }
-
-        function selectGal(i) {
-            const overview = document.getElementById('galAll');
-            const wasOpen = overview && !overview.hidden;
-            rGal(i);
-            if (wasOpen) {
-                toggleGalOverview(false);
-                document.getElementById('galThumbs')?.querySelector('.g-th.active')?.focus({ preventScroll: true });
-            }
-        }
-
         function show(id) {
             const d = D[id]; if (!d) return;
             const l = lang;
@@ -1460,7 +1373,7 @@
                 const multi = d.p.length > 1;
                 const photoLabel = l === 'tr' ? 'Fotoğraf' : 'Photo';
                 const allLabel = l === 'tr' ? 'Tüm fotoğraflar' : 'All photos';
-                const th = multi ? d.p.map((s, i) => `<button type="button" class="g-th${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="${photoLabel} ${i + 1} / ${d.p.length}" aria-current="${i === 0}" onclick="selectGal(${i})"><img src="${s}" alt="" loading="lazy"/><span class="g-th-num" aria-hidden="true">${i + 1}</span></button>`).join('') : '';
+                const th = multi ? d.p.map((s, i) => `<button type="button" class="g-th${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="${photoLabel} ${i + 1} / ${d.p.length}" aria-current="${i === 0}" onclick="rGal(${i})"><img src="${s}" alt="" loading="lazy"/></button>`).join('') : '';
                 b.innerHTML = `
                   <div class="m-left">
                     <div class="gal-main" style="flex:1;min-height:0;" ${multi ? 'onclick="rGal(cI+1)"' : ''}>
@@ -1468,10 +1381,9 @@
                       ${multi ? `<div class="gal-nav">
                         <button type="button" class="g-btn" aria-label="${l === 'tr' ? 'Önceki fotoğraf' : 'Previous photo'}" onclick="event.stopPropagation();rGal(cI-1)">&#8592;</button>
                         <button type="button" class="g-btn" aria-label="${l === 'tr' ? 'Sonraki fotoğraf' : 'Next photo'}" onclick="event.stopPropagation();rGal(cI+1)">&#8594;</button>
-                      </div>
-                      <div class="gal-overview" id="galAll" role="group" aria-label="${allLabel}" onclick="event.stopPropagation()" hidden>${th}</div>` : ''}
+                      </div>` : ''}
                     </div>
-                    ${multi ? `<div class="gal-tools"><span class="g-cnt" id="galN" aria-live="polite" aria-atomic="true">1 / ${d.p.length}</span><button type="button" class="gal-toggle" id="galToggle" aria-controls="galAll" aria-expanded="false" onclick="toggleGalOverview()">${allLabel} (${d.p.length})</button></div><div class="gal-thumbs" id="galThumbs" role="group" aria-label="${allLabel}" style="margin-bottom:0;flex-shrink:0;">${th}</div>` : ''}
+                    ${multi ? `<div class="gal-tools"><span class="g-cnt" id="galN" aria-live="polite" aria-atomic="true">1 / ${d.p.length}</span></div><div class="gal-thumbs" id="galThumbs" role="group" aria-label="${allLabel}" style="margin-bottom:0;flex-shrink:0;">${th}</div>` : ''}
                   </div>
                   <div class="m-right">
                     <p class="m-desc" style="margin-bottom:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${d.desc[l]}</p>
@@ -1503,12 +1415,8 @@
         function closeIf(e) { if (e.target === document.getElementById('overlay')) closeM(); }
         document.addEventListener('keydown', e => {
             if (!document.getElementById('overlay').classList.contains('open')) return;
-            const overviewOpen = document.getElementById('galAll')?.hidden === false;
-            if (e.key === 'Escape') {
-                if (overviewOpen) toggleGalOverview(false);
-                else closeM();
-            }
-            if (!overviewOpen && cP.length > 1 && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
+            if (e.key === 'Escape') closeM();
+            if (cP.length > 1 && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
                 e.preventDefault();
                 rGal(cI + (e.key === 'ArrowRight' ? 1 : -1));
             }
