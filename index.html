@@ -757,34 +757,106 @@
             background: rgba(0, 0, 0, .95);
         }
 
+        .gal-tools {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
         .g-cnt {
+            font-size: 12px;
+            letter-spacing: .04em;
+            color: var(--t);
+            white-space: nowrap;
+        }
+
+        .gal-toggle {
+            padding: 7px 10px;
+            border: 1px solid rgba(212, 255, 63, .3);
+            border-radius: 8px;
+            background: var(--accent-muted);
+            color: var(--accent);
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .gal-overview {
             position: absolute;
-            bottom: 10px;
-            right: 12px;
-            font-size: 9px;
-            letter-spacing: .08em;
-            color: rgba(255, 255, 255, .5);
-            background: rgba(0, 0, 0, .5);
-            padding: 3px 7px;
-            border-radius: 100px;
+            inset: 0;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            align-content: start;
+            gap: 8px;
+            padding: 8px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            background: var(--bg);
+        }
+
+        .gal-overview[hidden] {
+            display: none;
+        }
+
+        .gal-toggle:focus-visible,
+        .g-th:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: -2px;
         }
 
         .gal-thumbs {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             gap: 6px;
+            min-width: 0;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+            scrollbar-width: thin;
+            scrollbar-color: var(--m) transparent;
             margin-bottom: 22px;
         }
 
+        .gal-thumbs::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .gal-thumbs::-webkit-scrollbar-thumb {
+            background: var(--m);
+            border-radius: 3px;
+        }
+
         .g-th {
-            flex: 1 1 64px;
+            position: relative;
+            flex: 0 0 64px;
+            min-width: 0;
+            padding: 0;
             aspect-ratio: 4/3;
             border-radius: 8px;
             overflow: hidden;
             cursor: pointer;
+            background: var(--s2);
             border: 2px solid transparent;
             transition: border-color .2s, opacity .2s;
-            opacity: .45;
+            opacity: .85;
+        }
+
+        .g-th-num {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            padding: 1px 4px;
+            border-radius: 4px;
+            font-size: 9px;
+            line-height: 1.4;
+            color: #fff;
+            background: rgba(0, 0, 0, .8);
+        }
+
+        .g-th.active .g-th-num {
+            color: #111;
+            background: var(--accent);
         }
 
         .g-th.active {
@@ -793,14 +865,21 @@
         }
 
         .g-th:hover {
-            opacity: .75;
+            opacity: 1;
         }
 
         .g-th img {
             width: 100%;
             height: 100%;
+            aspect-ratio: auto;
             object-fit: cover;
             display: block;
+        }
+
+        @media (hover: none) {
+            .gal-nav {
+                opacity: 1;
+            }
         }
 
         .m-desc {
@@ -981,22 +1060,9 @@
                 text-align: center;
             }
 
-            /* Dar ekranda küçük resimler tek satırda, yana kaydırmalı.
-               Satırlara yayılınca şerit 272px'e çıkıp asıl fotoğrafa
-               149px bırakıyordu. */
-            .gal-thumbs {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                overscroll-behavior-x: contain;
-                scrollbar-width: none;
-            }
-
-            .gal-thumbs::-webkit-scrollbar {
-                display: none;
-            }
-
+            /* Şerit fotoğrafın alanını korur; tüm fotoğraflar ayrı görünümde açılır. */
             .g-th {
-                flex: 0 0 54px;
+                flex: 0 0 58px;
             }
         }
 
@@ -1313,11 +1379,65 @@
 
         let cP = [], cI = 0;
 
+        function syncGalThumb() {
+            const strip = document.getElementById('galThumbs');
+            const active = strip?.querySelector('.g-th.active');
+            if (!active) return;
+            const stripBox = strip.getBoundingClientRect();
+            const activeBox = active.getBoundingClientRect();
+            const left = strip.scrollLeft + activeBox.left - stripBox.left - (strip.clientWidth - activeBox.width) / 2;
+            strip.scrollTo({ left: Math.max(0, Math.min(left, strip.scrollWidth - strip.clientWidth)), behavior: 'auto' });
+        }
+
         function rGal(i) {
-            cI = (i + cP.length) % cP.length;
-            document.getElementById('galM').src = cP[cI];
-            document.getElementById('galN').textContent = `${cI + 1} / ${cP.length}`;
-            document.querySelectorAll('.g-th').forEach((t, j) => t.classList.toggle('active', j === cI));
+            if (!cP.length) return;
+            cI = ((i % cP.length) + cP.length) % cP.length;
+            const main = document.getElementById('galM');
+            if (!main) return;
+            main.src = cP[cI];
+            main.alt = (lang === 'tr' ? 'Fotoğraf ' : 'Photo ') + (cI + 1);
+            const count = document.getElementById('galN');
+            if (count) count.textContent = (cI + 1) + ' / ' + cP.length;
+            document.querySelectorAll('.g-th').forEach(t => {
+                const selected = Number(t.dataset.index) === cI;
+                t.classList.toggle('active', selected);
+                t.setAttribute('aria-current', String(selected));
+            });
+            syncGalThumb();
+        }
+
+        function toggleGalOverview(open) {
+            const overview = document.getElementById('galAll');
+            const toggle = document.getElementById('galToggle');
+            if (!overview || !toggle) return;
+            const expanded = typeof open === 'boolean' ? open : overview.hidden;
+            overview.hidden = !expanded;
+            toggle.setAttribute('aria-expanded', String(expanded));
+            toggle.textContent = expanded
+                ? (lang === 'tr' ? 'Fotoğrafa dön' : 'Back to photo')
+                : (lang === 'tr' ? 'Tüm fotoğraflar' : 'All photos') + ' (' + cP.length + ')';
+            if (expanded) {
+                const active = overview.querySelector('.g-th.active');
+                if (active) {
+                    active.focus({ preventScroll: true });
+                    const box = active.getBoundingClientRect();
+                    const area = overview.getBoundingClientRect();
+                    overview.scrollTop += box.top - area.top - (overview.clientHeight - box.height) / 2;
+                }
+            } else {
+                toggle.focus({ preventScroll: true });
+                syncGalThumb();
+            }
+        }
+
+        function selectGal(i) {
+            const overview = document.getElementById('galAll');
+            const wasOpen = overview && !overview.hidden;
+            rGal(i);
+            if (wasOpen) {
+                toggleGalOverview(false);
+                document.getElementById('galThumbs')?.querySelector('.g-th.active')?.focus({ preventScroll: true });
+            }
         }
 
         function show(id) {
@@ -1331,18 +1451,20 @@
                 /* Tek görselli projede şerit, oklar ve sayaç gizlenir:
                    tek küçük resim bütün genişliğe yayılıp görseli eziyordu */
                 const multi = d.p.length > 1;
-                const th = multi ? d.p.map((s, i) => `<div class="g-th${i === 0 ? ' active' : ''}" onclick="rGal(${i})"><img src="${s}" loading="lazy"/></div>`).join('') : '';
+                const photoLabel = l === 'tr' ? 'Fotoğraf' : 'Photo';
+                const allLabel = l === 'tr' ? 'Tüm fotoğraflar' : 'All photos';
+                const th = multi ? d.p.map((s, i) => `<button type="button" class="g-th${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="${photoLabel} ${i + 1} / ${d.p.length}" aria-current="${i === 0}" onclick="selectGal(${i})"><img src="${s}" alt="" loading="lazy"/><span class="g-th-num" aria-hidden="true">${i + 1}</span></button>`).join('') : '';
                 b.innerHTML = `
                   <div class="m-left">
                     <div class="gal-main" style="flex:1;min-height:0;" ${multi ? 'onclick="rGal(cI+1)"' : ''}>
-                      <img id="galM" src="${d.p[0]}" style="width:100%;height:100%;object-fit:contain;border-radius:10px;display:block;${multi ? 'cursor:pointer;' : ''}"/>
+                      <img id="galM" src="${d.p[0]}" alt="${photoLabel} 1" style="width:100%;height:100%;object-fit:contain;border-radius:10px;display:block;${multi ? 'cursor:pointer;' : ''}"/>
                       ${multi ? `<div class="gal-nav">
-                        <button class="g-btn" onclick="rGal(cI-1)">&#8592;</button>
-                        <button class="g-btn" onclick="rGal(cI+1)">&#8594;</button>
+                        <button type="button" class="g-btn" aria-label="${l === 'tr' ? 'Önceki fotoğraf' : 'Previous photo'}" onclick="event.stopPropagation();rGal(cI-1)">&#8592;</button>
+                        <button type="button" class="g-btn" aria-label="${l === 'tr' ? 'Sonraki fotoğraf' : 'Next photo'}" onclick="event.stopPropagation();rGal(cI+1)">&#8594;</button>
                       </div>
-                      <div class="g-cnt" id="galN">1 / ${d.p.length}</div>` : ''}
+                      <div class="gal-overview" id="galAll" role="group" aria-label="${allLabel}" onclick="event.stopPropagation()" hidden>${th}</div>` : ''}
                     </div>
-                    ${multi ? `<div class="gal-thumbs" style="margin-bottom:0;flex-shrink:0;">${th}</div>` : ''}
+                    ${multi ? `<div class="gal-tools"><span class="g-cnt" id="galN" aria-live="polite" aria-atomic="true">1 / ${d.p.length}</span><button type="button" class="gal-toggle" id="galToggle" aria-controls="galAll" aria-expanded="false" onclick="toggleGalOverview()">${allLabel} (${d.p.length})</button></div><div class="gal-thumbs" id="galThumbs" role="group" aria-label="${allLabel}" style="margin-bottom:0;flex-shrink:0;">${th}</div>` : ''}
                   </div>
                   <div class="m-right">
                     <p class="m-desc" style="margin-bottom:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${d.desc[l]}</p>
@@ -1373,9 +1495,16 @@
         function closeM() { document.getElementById('overlay').classList.remove('open'); document.body.style.overflow = ''; }
         function closeIf(e) { if (e.target === document.getElementById('overlay')) closeM(); }
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') closeM();
-            if (e.key === 'ArrowRight' && cP.length) rGal(cI + 1);
-            if (e.key === 'ArrowLeft' && cP.length) rGal(cI - 1);
+            if (!document.getElementById('overlay').classList.contains('open')) return;
+            const overviewOpen = document.getElementById('galAll')?.hidden === false;
+            if (e.key === 'Escape') {
+                if (overviewOpen) toggleGalOverview(false);
+                else closeM();
+            }
+            if (!overviewOpen && cP.length > 1 && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
+                e.preventDefault();
+                rGal(cI + (e.key === 'ArrowRight' ? 1 : -1));
+            }
         });
     </script>
 </body>
