@@ -859,6 +859,13 @@
             background: var(--accent);
         }
 
+        /* Alttaki şeritte numara yok: sayaç zaten yazıyor, her karede
+           rakam gözü yoruyordu. Numaralar yalnız "Tüm fotoğraflar"
+           ızgarasında kalır. */
+        .gal-thumbs .g-th-num {
+            display: none;
+        }
+
         .g-th.active {
             border-color: var(--accent);
             opacity: 1;
